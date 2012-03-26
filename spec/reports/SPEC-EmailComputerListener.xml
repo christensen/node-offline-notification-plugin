@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="EmailComputerListener" tests="13" time="0.489" failures="0" errors="0" skipped="0">
+  <testcase name="EmailComputerListener should send an email if node is configured" time="0.065">
+  </testcase>
+  <testcase name="EmailComputerListener should not send email if node is unconfigured" time="0.012">
+  </testcase>
+  <testcase name="EmailComputerListener should send one email per email address in the node configurations" time="0.028">
+  </testcase>
+  <testcase name="EmailComputerListener should only send one email if only one email is in the list" time="0.018">
+  </testcase>
+  <testcase name="EmailComputerListener should not send any emails if it's the master going down (offlineCause == nil)" time="0.008">
+  </testcase>
+  <testcase name="EmailComputerListener should send an online message if it went offline earlier" time="0.023">
+  </testcase>
+  <testcase name="EmailComputerListener should expand a single environment variable" time="0.018">
+  </testcase>
+  <testcase name="EmailComputerListener should return nil if environment variable does not exist" time="0.108">
+  </testcase>
+  <testcase name="EmailComputerListener should expand a single environment variable with several emails in it" time="0.017">
+  </testcase>
+  <testcase name="EmailComputerListener should expand several environment variables" time="0.027">
+  </testcase>
+  <testcase name="EmailComputerListener should take a mix between environment variables and emails" time="0.019">
+  </testcase>
+  <testcase name="EmailComputerListener should handle a non-existent environment variable in a string with several other entries" time="0.015">
+  </testcase>
+  <testcase name="EmailComputerListener should handle several environment variables with several emails in each" time="0.04">
+  </testcase>
+  <system-out>
+  Could not find environment variable ENVVAR
+  Could not find environment variable ENVVAR1
+  </system-out>
+  <system-err>
+  </system-err>
+</testsuite>
