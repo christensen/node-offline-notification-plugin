@@ -1,0 +1,6 @@
+Authors: Jens Christensen & Jonatan Ekstedt
+
+1.switch to JRuby
+  rvm jruby
+2. build plugin with the jpi gem
+  jpi build

@@ -1,0 +1,10 @@
+<%
+f = taglib("/lib/form")
+f.block do
+  f.entry(:title => 'Node offline email notification',
+	  			:field => 'email',
+	  			:description => 'White space separated emails to notify if this node goes offline. WARNING Windows users: To update this field you must deactivate it, save and then activate and enter new email addresses.') do
+    f.textbox
+  end
+end
+%>
