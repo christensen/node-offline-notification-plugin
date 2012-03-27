@@ -5,6 +5,11 @@ module Jenkins
     module ComputerListener
     end
   end
+
+  module Plugin
+    module OpaqueJavaObject
+    end
+  end
 end
 
 require 'environmentvariablesnodeproperty'
@@ -78,6 +83,7 @@ module Java_Wrapper
 end
 
 include Jenkins::Slaves::ComputerListener
+include Jenkins::Plugin::OpaqueJavaObject
 include Java_Wrapper
 
 require 'emailcomputerlistener'

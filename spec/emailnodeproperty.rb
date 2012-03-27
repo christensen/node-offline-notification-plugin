@@ -1,6 +1,6 @@
 require 'environmentvariablesnodeproperty'
 module Jenkins
-  class Plugin
+  module Plugin
     class Proxy
       def getTarget
           EmailNodeProperty.new

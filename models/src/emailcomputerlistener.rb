@@ -1,8 +1,6 @@
 class EmailComputerListener
   include Jenkins::Slaves::ComputerListener
   
-  # Computers that previously went offline
-  @@offlineComputers = []
   # Our Java_Wrapper so that tests can pass
   @@java_wrap = Java_Wrapper
   
@@ -12,8 +10,17 @@ class EmailComputerListener
   def online(computer, listener)
     @name = computer.native.getName()
     
-    if isComputerInOfflineList?()
-      willNotifyResponsible(computer, true)
+    if computer.to_s.match("Master")
+      computersArray = @@java_wrap::getAllComputers()
+
+      for c in computersArray
+        if c.isOffline()
+          @name = c.getName()
+          notifyResponsibleOffline(c)
+        end
+      end
+    else
+      notifyResponsibleOnline(computer)
     end
   end
     
@@ -28,24 +35,20 @@ class EmailComputerListener
     cause = computer.native.getOfflineCause()
     @name = computer.native.getName()
     
-     # Add computer to @@offlineComputers and notify responsible
-     # UNLESS the master is restarted, wich will generate cause == nil
+     # UNLESS the master is restarted, which will generate cause == nil
     unless cause.nil?
-      addToList()
-      willNotifyResponsible(computer, false)
+      notifyResponsibleOffline(computer)
     end
   end
-  
-  #
-  # Check if the computer is in the offline list
-  #
+
   private
-  def isComputerInOfflineList?
-    if @@offlineComputers.find_index(@name)
-      return true
-    else
-      return false
-    end
+  def notifyResponsibleOffline (computer)
+    notifyResponsible(computer, false)
+  end
+
+  private
+  def notifyResponsibleOnline(computer)
+    notifyResponsible(computer, true)
   end
   
   #
@@ -54,22 +57,12 @@ class EmailComputerListener
   #          => false for offline
   #
   private
-  def willNotifyResponsible(computer, onlineCalled)
+  def notifyResponsible(computer, onlineCalled)
     updateEmailAddresses(computer)
     unless @emailAddresses.nil?
       for emailAddress in @emailAddresses
         @@java_wrap::sendEmail(emailAddress, @name, onlineCalled)
       end
-    end
-  end
-  
-  #
-  # Add current computer to @@offlineComputers unless it's already there
-  #
-  private
-  def addToList
-    unless @@offlineComputers.find_index(@name)
-      @@offlineComputers.push(@name)
     end
   end
   
@@ -118,7 +111,11 @@ class EmailComputerListener
   #
   private
   def getEmailNodeProperty(computer)
-    nodeProps = computer.native.getNode().getNodeProperties()
+    if computer.is_a? Jenkins::Plugin::OpaqueJavaObject
+      nodeProps = computer.native.getNode().getNodeProperties()
+    else
+      nodeProps = computer.getNode().getNodeProperties()
+    end
     emailNodeProp = nodeProps.find {"EmailNodeProperty"}
     return emailNodeProp.nil? ? nil : emailNodeProp.getTarget
   end

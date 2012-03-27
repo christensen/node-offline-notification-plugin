@@ -46,4 +46,10 @@ module Java_Wrapper
       puts "  #{e.to_s}"
     end
   end
+
+  def Java_Wrapper.getAllComputers()
+    computers = Jenkins.getInstance().getComputers()
+    return computers
+  end
+
 end
