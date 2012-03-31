@@ -16,7 +16,7 @@ class EmailComputerListener
       for c in computersArray
         if c.isOffline()
           @name = c.getName()
-          notifyResponsibleOffline(c)
+          startUpNotification(c)
         end
       end
     else
@@ -41,14 +41,33 @@ class EmailComputerListener
     end
   end
 
+  #
+  # Called when a node goes offline
+  # parameters sent to notifyResponsible are:
+  # computer object, online?, masterStart?
+  #
   private
   def notifyResponsibleOffline (computer)
-    notifyResponsible(computer, false)
+    notifyResponsible(computer, false, false)
   end
 
+  #
+  # Same as above, except called when computers come online
+  #
   private
   def notifyResponsibleOnline(computer)
-    notifyResponsible(computer, true)
+    notifyResponsible(computer, true, false)
+  end
+  
+  #
+  # Called when master is starting up
+  # to give a special email message
+  # notifying that the master restarted
+  # and nodes might not be connecting again
+  #
+  private
+  def startUpNotification(computer)
+    notifyResponsible(computer, true, true)
   end
   
   #
@@ -57,11 +76,11 @@ class EmailComputerListener
   #          => false for offline
   #
   private
-  def notifyResponsible(computer, onlineCalled)
+  def notifyResponsible(computer, onlineCalled, masterStart)
     updateEmailAddresses(computer)
     unless @emailAddresses.nil?
       for emailAddress in @emailAddresses
-        @@java_wrap::sendEmail(emailAddress, @name, onlineCalled)
+        @@java_wrap::sendEmail(emailAddress, @name, onlineCalled, masterStart)
       end
     end
   end
@@ -116,11 +135,15 @@ class EmailComputerListener
     else
       nodeProps = computer.getNode().getNodeProperties()
     end
-    emailNodeProp = nodeProps.find {"EmailNodeProperty"}
-    return emailNodeProp.nil? ? nil : emailNodeProp.getTarget
+
+    for emailProp in nodeProps
+      if emailProp.to_s.match("proxy.hudson.slaves.NodeProperty")
+        return emailProp.getTarget()
+      end
+    end
+    
+    nil
   end
-
-
 
   #
   # Evaluates the environment variable

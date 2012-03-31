@@ -26,11 +26,14 @@ module Java_Wrapper
   #
   # Using Jenkins built-in support for emailing
   #
-  def Java_Wrapper.sendEmail(mail, name, online)
+  def Java_Wrapper.sendEmail(mail, name, online, startup)
     newSession = Mailer.descriptor().createSession()
     begin
       msg = MimeMessage.new(newSession)
-
+    if startup
+      msg.setSubject("The master has been restarted.")
+      msg.setText("The master was restarted and the node (#{name}) is offline. If you don't recieve an online message it is probably offline still.")
+    else
       if online
         msg.setSubject("Slave back online")
         msg.setText("The connection to the slave (#{name}) was restored.")
@@ -38,6 +41,7 @@ module Java_Wrapper
         msg.setSubject("Slave Connection lost")
         msg.setText("The connection to the slave (#{name}) you are responsible for, has been lost.")
       end
+    end
 
       msg.setFrom(InternetAddress.new(Mailer.descriptor().getAdminAddress()))
       msg.setRecipient(Message::RecipientType::TO, InternetAddress.new(mail))
@@ -47,9 +51,12 @@ module Java_Wrapper
     end
   end
 
+  #
+  # Returns all computers associated with the master
+  # These will be "java" computers
+  #
   def Java_Wrapper.getAllComputers()
     computers = Jenkins.getInstance().getComputers()
     return computers
   end
-
 end
