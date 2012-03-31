@@ -29,7 +29,7 @@ module Java_Wrapper
     end
   end
   
-  def sendEmail(mail, name, online)
+  def sendEmail(mail, name, online, startup)
     @@numberOfEmailsSent += 1
     @@arrayOfEmails.push(mail)
     @@mail = mail

@@ -1,4 +1,11 @@
 require 'emailnodeproperty'
+
+class String
+  def getTarget()
+    EmailNodeProperty.new
+  end
+end
+
 class Node
   def getNodeName
     "foo"
@@ -7,7 +14,7 @@ end
 
 class ConfiguredNode < Node
   def getNodeProperties
-    [EmailNodeProperty.new]
+    ["somethingWeDontWant", "proxy.hudson.slaves.NodeProperty", "somethingelse"]
   end
 end
 
