@@ -2,12 +2,11 @@
 Jenkins::Plugin::Specification.new do |plugin|
   plugin.name = "nodeofflinenotification"
   plugin.display_name = "Node Offline Notification Plugin"
-  plugin.version = '1.0'
+  plugin.version = '1.0.2'
   plugin.description = 'Configure a node with email addresses to notify in case the node goes offline.'
 
   plugin.url = 'https://wiki.jenkins-ci.org/display/JENKINS/node-offline-notification-plugin'
 
-  # The first argument is your user name for jenkins-ci.org.
   plugin.developed_by "christensen", "Jens Christensen 0xchristensen@gmail.com"
 
   #  :github => 'christensen/node-offline-notification-plugin'
