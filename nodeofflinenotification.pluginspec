@@ -2,7 +2,7 @@
 Jenkins::Plugin::Specification.new do |plugin|
   plugin.name = "nodeofflinenotification"
   plugin.display_name = "Node Offline Notification Plugin"
-  plugin.version = '1.0.2'
+  plugin.version = '1.0.3'
   
   plugin.description = 'Configure a node with email addresses to notify in case the node goes offline.'
 

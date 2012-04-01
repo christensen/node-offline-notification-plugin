@@ -91,13 +91,14 @@ class EmailComputerListener
   #
   private
   def updateEmailAddresses computer
-    emailNodeProp = getEmailNodeProperty(computer)
   
+    @emailAddresses = []
+    
+    emailNodeProp = getEmailNodeProperty(computer)
+    
     if emailNodeProp.nil?
       return
     end
-
-    @emailAddresses = []
 
     # Create an array with the email addresses
     localEmailArray = emailNodeProp.email.split(' ')
